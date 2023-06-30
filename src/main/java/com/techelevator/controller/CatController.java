@@ -1,6 +1,7 @@
 package com.techelevator.controller;
 
 import com.techelevator.dao.CatCardDao;
+import com.techelevator.exception.DaoException;
 import com.techelevator.model.CatCard;
 import com.techelevator.services.CatFactService;
 import com.techelevator.services.CatPicService;
@@ -31,5 +32,23 @@ public class CatController {
         randomCard.setImgUrl(catPicService.getPic().getFile());
         randomCard.setCaption("");
         return randomCard;
+    }
+    @RequestMapping(path = "/{id}", method = RequestMethod.PUT)
+    public CatCard update(@Valid @RequestBody CatCard cat, @PathVariable int id){
+        cat.setCatCardId(id);
+        try{
+            return catCardDao.updateCatCard(cat);
+        } catch (DaoException e){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "The id not valid.");
+        }
+    }
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @RequestMapping(path = "/{id}", method = RequestMethod.DELETE)
+    public void delete(@PathVariable int id){
+        catCardDao.deleteCatCardById(id);
+    }
+    @RequestMapping(path = "", method = RequestMethod.POST)
+    public CatCard post(@RequestBody CatCard cat){
+        return catCardDao.createCatCard(cat);
     }
 }
