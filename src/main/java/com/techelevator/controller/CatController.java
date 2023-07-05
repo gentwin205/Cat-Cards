@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping(path = "/api/cards")
@@ -50,5 +51,13 @@ public class CatController {
     @RequestMapping(path = "", method = RequestMethod.POST)
     public CatCard post(@RequestBody CatCard cat){
         return catCardDao.createCatCard(cat);
+    }
+    @RequestMapping(path = "", method = RequestMethod.GET)
+    public List<CatCard> cat(){
+        return catCardDao.getCatCards();
+    }
+    @RequestMapping(path = "/{id}", method = RequestMethod.GET)
+    public CatCard get(@PathVariable int id){
+        return catCardDao.getCatCardById(id);
     }
 }
